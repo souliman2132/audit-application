@@ -240,3 +240,19 @@ li {
   opacity: 1;
   color: #1955ab;
 }
+body {
+  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.28); /* Léger filtre foncé pour lisibilité */
+  z-index: -1;
+  pointer-events: none;
+}
