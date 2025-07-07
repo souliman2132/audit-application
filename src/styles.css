@@ -1,0 +1,110 @@
+:root {
+  --color-bg: #f6faff;
+  --color-card: #fff;
+  --color-primary: #2186eb;
+  --color-accent: #31c987;
+  --color-warning: #ffb347;
+  --color-danger: #e05c5c;
+  --color-text: #222f44;
+  --color-muted: #a6b3c6;
+  --color-shadow: 0 4px 16px rgba(33,134,235,0.06);
+}
+
+[data-theme="dark"] {
+  --color-bg: #181c27;
+  --color-card: #21263a;
+  --color-primary: #48aaff;
+  --color-accent: #31c987;
+  --color-warning: #ffc073;
+  --color-danger: #e05c5c;
+  --color-text: #f5f6fa;
+  --color-muted: #6b7c97;
+  --color-shadow: 0 6px 24px rgba(33,134,235,0.16);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', 'Nunito', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(33,134,235,0.08);
+}
+
+.btn:hover {
+  background: var(--color-accent);
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: 18px;
+  box-shadow: var(--color-shadow);
+  padding: 26px;
+  margin-bottom: 30px;
+  border: 1px solid #e8eaf2;
+  transition: box-shadow 0.2s;
+}
+
+.card .badge {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 8px;
+  color: #fff;
+}
+
+.badge-urgency-1 { background: #80bfff; }
+.badge-urgency-2 { background: #a0c96b; }
+.badge-urgency-3 { background: #ffd766; color: #333; }
+.badge-urgency-4 { background: #ffb347; }
+.badge-urgency-5 { background: #e05c5c; }
+
+.card .card-title {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--color-primary);
+}
+
+.card .card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+input[type="text"], input[type="date"], input[type="time"], select {
+  background: var(--color-bg);
+  border: 1.5px solid #e5eaf3;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 15px;
+  color: var(--color-text);
+  margin-right: 6px;
+  margin-bottom: 8px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, select:focus {
+  border: 1.5px solid var(--color-primary);
+}
+
+input[type="checkbox"] {
+  transform: scale(1.25);
+  accent-color: var(--color-primary);
+  margin-right: 6px;
+}

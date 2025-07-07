@@ -71,7 +71,7 @@ export default function Calendrier({ goals, setGoals, routines, setRoutines, tas
         if (r.endDate && dateKey > r.endDate) continue;
 
         if (!eventsByDate[dateKey]) eventsByDate[dateKey] = [];
-        const doneRoutine = r.doneJours ? (r.doneJours[dayOfWeek] || false) : false;
+        const doneRoutine = r.doneDates ? (r.doneDates[dateKey] || false) : false;
         eventsByDate[dateKey].push({
           type: "routine",
           label: r.label,

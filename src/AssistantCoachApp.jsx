@@ -8,7 +8,7 @@ const INIT_GOALS = [
   {
     cat: "Trouver un emploi",
     urgency: 4,
-    deadline: "2025-07-05",
+    deadline: "2025-07-07",
     done: 0,
     subtasks: [
       {
@@ -17,7 +17,7 @@ const INIT_GOALS = [
         benefit: "Plus tu postules, plus tu as de chances !",
         danger: "Tu retardes ta recherche et risques de manquer des offres.",
         done: false,
-        deadline: "2025-07-02"
+        deadline: "2025-07-07"
       }
     ],
     routines: [
@@ -37,33 +37,42 @@ export default function AssistantCoachApp() {
   const [view, setView] = useState(0);
 
   useEffect(() => {
+    console.log("[DEBUG] useEffect déclenché");
     const now = new Date();
     const dayIdx = now.getDay();
-    const todayStr = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
+    const todayStr = now.toISOString().slice(0, 10);
 
-    // Extraire routines de chaque objectif, filtrer par jour, construire tâches routines du jour
-    const todayRoutines = goals.flatMap((goal, gi) => {
-      if (!goal.routines) return [];
-      return goal.routines.flatMap((r, ri) => {
-        if (r.jours.includes(dayIdx)) {
-          return {
+    // 1. Extraire toutes les routines du jour pour tous les objectifs
+    const routinesList = [];
+    goals.forEach((goal, gi) => {
+      if (!goal.routines) return;
+      goal.routines.forEach((r, ri) => {
+        if (r.jours && r.jours.includes(dayIdx)) {
+          routinesList.push({
             label: r.label,
             heure: r.heure,
             done: r.doneJours?.[dayIdx] || false,
             isRoutine: true,
             goalIndex: gi,
             routineIndex: ri,
-            jourIndex: dayIdx
-          };
+            jourIndex: dayIdx,
+          });
         }
-        return [];
       });
     });
 
-    // Sous-tâches du jour
+    // 2. Extraire les sous-tâches du jour (deadline aujourd'hui)
     const todaySubtasks = [];
     goals.forEach((goal, gi) => {
       (goal.subtasks || []).forEach((st, si) => {
+        console.log(
+  "[DEBUG] Sous-tâche:",
+  st.label,
+  "| deadline:", st.deadline,
+  "| todayStr:", todayStr,
+  "| EQUALS ?", st.deadline === todayStr
+);
+
         if (st.deadline === todayStr) {
           todaySubtasks.push({
             label: st.label,
@@ -77,21 +86,28 @@ export default function AssistantCoachApp() {
       });
     });
 
-    setTasks(ts => {
-      const labels = ts.map(t => t.label + (t.heure || ""));
-      const toAddRoutines = todayRoutines.filter(rt => !labels.includes(rt.label + rt.heure));
-      const toAddSubtasks = todaySubtasks.filter(tsk => !labels.includes(tsk.label));
-      return [...ts, ...toAddRoutines, ...toAddSubtasks];
-    });
+    setTasks([...routinesList, ...todaySubtasks]);
   }, [goals]);
 
   return (
     <div style={{ padding: 40 }}>
-      <div style={{ marginBottom: 30 }}>
-        <button onClick={() => setView(0)}>Objectifs</button>
-        <button onClick={() => setView(1)}>Planning du jour</button>
-        <button onClick={() => setView(2)}>Calendrier</button>
-        <button onClick={() => setView(3)}>Routines</button>
+      <div className="navbar">
+        <button
+          className={`nav-btn${view === 0 ? " active" : ""}`}
+          onClick={() => setView(0)}
+        >Objectifs</button>
+        <button
+          className={`nav-btn${view === 1 ? " active" : ""}`}
+          onClick={() => setView(1)}
+        >Planning du jour</button>
+        <button
+          className={`nav-btn${view === 2 ? " active" : ""}`}
+          onClick={() => setView(2)}
+        >Calendrier</button>
+        <button
+          className={`nav-btn${view === 3 ? " active" : ""}`}
+          onClick={() => setView(3)}
+        >Routines</button>
       </div>
       {view === 0 && <Objectifs goals={goals} setGoals={setGoals} />}
       {view === 1 && <PlanningDuJour tasks={tasks} setTasks={setTasks} goals={goals} setGoals={setGoals} />}

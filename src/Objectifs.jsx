@@ -433,6 +433,7 @@ export default function Objectifs({ goals, setGoals, routines, setRoutines }) {
                             })
                           );
                         }}
+                            onToggleDone={() => toggleSubDone(i, j)}
                       />
                     </li>
                   ))}
@@ -610,66 +611,47 @@ export default function Objectifs({ goals, setGoals, routines, setRoutines }) {
               )}
 
               {/* Formulaire édition routine */}
-              {editRoutineIdx !== null && (
-                <div style={{ marginTop: 12, border: "1px solid #ccc", padding: 12, borderRadius: 8 }}>
-                  <h4>Modifier la routine</h4>
-                  <input
-                    type="text"
-                    value={editRoutineLabel}
-                    onChange={(e) => setEditRoutineLabel(e.target.value)}
-                    style={{ fontSize: 16, padding: 6, marginBottom: 10, width: "100%" }}
-                  />
-                  <input
-                    type="time"
-                    value={editRoutineHeure}
-                    onChange={(e) => setEditRoutineHeure(e.target.value)}
-                    style={{ fontSize: 16, padding: 6, marginBottom: 10, width: 120 }}
-                  />
-                  <input
-                    type="date"
-                    value={editRoutineStartDate}
-                    onChange={(e) => setEditRoutineStartDate(e.target.value)}
-                    style={{ width: 140, marginBottom: 10 }}
-                    placeholder="Date début"
-                    required
-                  />
-                  <input
-                    type="date"
-                    value={editRoutineEndDate}
-                    onChange={(e) => setEditRoutineEndDate(e.target.value)}
-                    style={{ width: 140, marginBottom: 10 }}
-                    placeholder="Date fin"
-                    required
-                  />
-                  <select
-                    value={editRoutineRecurrenceType}
-                    onChange={(e) => setEditRoutineRecurrenceType(e.target.value)}
-                    style={{ width: 160, marginBottom: 10 }}
-                  >
-                    {recurrenceTypes.map((rt) => (
-                      <option key={rt.value} value={rt.value}>
-                        {rt.label}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="number"
-                    min={1}
-                    value={editRoutineRecurrenceInterval}
-                    onChange={(e) => setEditRoutineRecurrenceInterval(Number(e.target.value))}
-                    style={{ width: 90, marginBottom: 10 }}
-                    title="Intervalle de récurrence (en semaines)"
-                  />
-                  <div>
-                    <button onClick={saveEditRoutine} style={{ marginRight: 10, padding: "6px 12px", cursor: "pointer" }}>
-                      Sauvegarder
-                    </button>
-                    <button onClick={cancelEditRoutine} style={{ padding: "6px 12px", cursor: "pointer" }}>
-                      Annuler
-                    </button>
-                  </div>
-                </div>
-              )}
+{editRoutineIdx !== null && (
+  <div style={{ marginTop: 12, border: "1px solid #ccc", padding: 12, borderRadius: 8 }}>
+    <h4>Modifier la routine</h4>
+    {/* ...inputs... */}
+    {/* ...select... */}
+    {/* BLOc jours à coller ici */}
+    <div style={{ display: "inline-flex", gap: 5, marginBottom: 10 }}>
+      {[0,1,2,3,4,5,6].map(day => (
+        <button
+          key={day}
+          type="button"
+          onClick={() =>
+            setEditRoutineJours(
+              editRoutineJours.includes(day)
+                ? editRoutineJours.filter(d => d !== day)
+                : [...editRoutineJours, day]
+            )
+          }
+          style={{
+            padding: 6,
+            background: editRoutineJours.includes(day) ? "#2186eb" : "#eee",
+            color: editRoutineJours.includes(day) ? "#fff" : "#000",
+            borderRadius: 4,
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          {joursAbrev[day]}
+        </button>
+      ))}
+    </div>
+    <div>
+      <button onClick={saveEditRoutine} style={{ marginRight: 10, padding: "6px 12px", cursor: "pointer" }}>
+        Sauvegarder
+      </button>
+      <button onClick={cancelEditRoutine} style={{ padding: "6px 12px", cursor: "pointer" }}>
+        Annuler
+      </button>
+    </div>
+  </div>
+)}
             </div>
           </div>
         );

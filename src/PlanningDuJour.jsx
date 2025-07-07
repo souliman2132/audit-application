@@ -12,14 +12,16 @@ export default function PlanningDuJour({ tasks, setTasks, goals, setGoals, routi
     if (r.nombreRecurrences > 0 && r.jours.includes(todayDay)) {
       const key = `${ri}-${todayDay}`;
       if (!seenRoutines.has(key)) {
-        routineTasks.push({
-          isRoutine: true,
-          routineIndex: ri,
-          label: r.label,
-          heure: r.heure,
-          jourIndex: todayDay,
-          done: r.doneJours?.[todayDay] || false,
-        });
+     const todayISO = today.toISOString().slice(0, 10); // ex: "2025-07-11"
+routineTasks.push({
+  isRoutine: true,
+  routineIndex: ri,
+  label: r.label,
+  heure: r.heure,
+  jourIndex: todayDay,
+  date: todayISO,
+  done: r.doneDates?.[todayISO] || false, // CHANGEMENT: On regarde si la routine est faite CE jour précis
+});
         seenRoutines.add(key);
       }
     }
@@ -35,9 +37,10 @@ export default function PlanningDuJour({ tasks, setTasks, goals, setGoals, routi
       setRoutines(rs => {
         const r = rs[t.routineIndex];
         if (!r) return rs;
-        const newDoneJours = { ...(r.doneJours || {}) };
-        const currentlyDone = !!newDoneJours[t.jourIndex];
-        newDoneJours[t.jourIndex] = !currentlyDone;
+   const newDoneDates = { ...(r.doneDates || {}) };
+const currentlyDone = !!newDoneDates[t.date];
+newDoneDates[t.date] = !currentlyDone;
+
 
         let newNombreRecurrences = r.nombreRecurrences ?? 0;
 
@@ -53,7 +56,7 @@ export default function PlanningDuJour({ tasks, setTasks, goals, setGoals, routi
         } else {
           const newRoutine = {
             ...r,
-            doneJours: newDoneJours,
+            doneDates: newDoneDates,
             nombreRecurrences: newNombreRecurrences,
           };
           newRoutines[t.routineIndex] = newRoutine;
